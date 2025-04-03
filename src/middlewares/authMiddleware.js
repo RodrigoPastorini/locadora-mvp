@@ -7,14 +7,17 @@ const authMiddleware = (req, res, next) => {
     return res.status(401).json({ error: 'Token não fornecido!' });
   }
 
+  const tokenClean = token.replace('Bearer ', '');
+  console.log('Token recebido:', tokenClean);
   try {
-    const decoded = jwt.verify(token.replace('Bearer ', ''), 'secreta-chave-super-segura');
+    const decoded = jwt.verify(tokenClean, process.env.JWT_SECRET);
+
     req.user = decoded;
+
     next();
   } catch (error) {
-    return res.status(401).json({ error: 'Token inválido!' });
+    return res.status(401).json({ error: 'Token inválido ou expirado!' });
   }
 };
 
 module.exports = authMiddleware;
-

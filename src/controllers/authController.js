@@ -1,4 +1,3 @@
-
 const db = require('../database/knex');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -24,8 +23,9 @@ const login = async (req, res) => {
       const token = jwt.sign(
         { id: user.id, email: user.email }, 
         process.env.JWT_SECRET,
-        { expiresIn: '1h' }
+        { expiresIn: '5min' }
       );
+      console.log('Token gerado:', token);
   
       return res.json({ message: 'Login bem-sucedido!', token });
     } catch (error) {
